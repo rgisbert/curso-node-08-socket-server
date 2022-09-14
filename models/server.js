@@ -9,6 +9,12 @@ class Server {
     this.app = express();
     this.port = process.env.PORT;
 
+    // === CFG SOCKET.IO ===
+    // Servidor propio
+    this.server = require('http').createServer(this.app);
+    // Todas las conexiones de socket.io
+    this.io = require('socket.io')(this.server);
+
     this.#middlewares();
   }
 
@@ -20,7 +26,8 @@ class Server {
   }
 
   listen() {
-    this.app.listen(this.port, () => {
+    // ! Substituye THIS.APP por THIS.SERVER
+    this.server.listen(this.port, () => {
       console.log(`Servidor levantado en http://localhost:${this.port}`);
     });
   }
