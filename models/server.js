@@ -1,6 +1,8 @@
 const cors = require('cors');
 const express = require('express');
 
+const {socketController} = require('../sockets/controller');
+
 /**
  * Clase para crear instancia del servidor
  */
@@ -16,6 +18,9 @@ class Server {
     this.io = require('socket.io')(this.server);
 
     this.#middlewares();
+
+    // Configuración de Sockets
+    this.#sockets();
   }
 
   #middlewares() {
@@ -23,6 +28,10 @@ class Server {
 
     // Directorio público
     this.app.use(express.static('public'));
+  }
+
+  #sockets() {
+    this.io.on('connection', socketController);
   }
 
   listen() {
